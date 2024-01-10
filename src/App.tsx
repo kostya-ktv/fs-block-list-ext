@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+"use client";
+import { NotAuth } from "@/components/not-auth";
+import { Switch } from "@/components/ui/switch";
+import { useAccount } from "@/hooks";
+import { accountControllerPatchAccount } from "@/lib/api/generated";
+import { QueryKeys } from "@/providers/query.provider";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const account = useAccount();
+  const queryClient = useQueryClient();
+
+  const blockAccountMutation = useMutation({
+    mutationFn: accountControllerPatchAccount,
+    onSuccess: async (data) =>
+      await queryClient.setQueryData([QueryKeys.account], data),
+  });
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div
+      className="
+    flex
+    flex-col
+    w-[300px]
+    gap-y-3
+    rounded-[20px]
+    text-[14px]
+    p-5
+    "
+    >
+      <h2 className="font-semibold text-xl">Block-list Extension</h2>
+      {account.isSuccess ? (
+        <div className="flex flex-col w-full gap-y-3">
+          <p className="text-green-500 text-center bg-green-50 w-full p-3 ">
+            Successfully connected
+          </p>
+          <div className="flex gap-x-3">
+            <label>Firewall</label>
+            <Switch
+              onCheckedChange={() =>
+                blockAccountMutation.mutate({
+                  isBlockingEnabled: !account.data.isBlockingEnabled,
+                })
+              }
+              checked={account.data.isBlockingEnabled || false}
+            />
+          </div>
+        </div>
+      ) : (
+        <NotAuth />
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
