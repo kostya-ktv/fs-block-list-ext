@@ -1,8 +1,11 @@
 "use client";
 import { NotAuth } from "@/components/not-auth";
+import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useAccount } from "@/hooks";
 import { accountControllerPatchAccount } from "@/lib/api/generated";
+import { createBrowserTab } from "@/lib/browser";
+import { CONSTANTS } from "@/lib/constants";
 import { QueryKeys } from "@/providers/query.provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -45,6 +48,13 @@ function App() {
               checked={account.data.isBlockingEnabled || false}
             />
           </div>
+          <Button
+            onClick={() => createBrowserTab(CONSTANTS.ADMIN_FE_URL)}
+            size="sm"
+            variant="outline"
+          >
+            Manage extension
+          </Button>
         </div>
       ) : (
         <NotAuth />

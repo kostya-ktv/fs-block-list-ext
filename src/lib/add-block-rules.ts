@@ -30,7 +30,8 @@ export const startUpdateBlockRules = () => {
         return await setNetRules([]);
       }
 
-      setNetRules([]);
+      const rules = await getBlockListNetRules();
+      setNetRules(rules);
     },
     5000,
   );

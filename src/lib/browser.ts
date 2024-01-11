@@ -35,9 +35,11 @@ export const setBrowserInterval = async (
 
 export const AddInstallListener = (callback: () => Promise<any>) => {
   chrome.runtime.onInstalled.addListener(async ({ reason }) => {
-    if (reason !== "install") {
-      return;
-    }
+    console.log("reason", reason);
+    //TODO
+    // if (reason !== "install") {
+    //   return;
+    // }
     await callback();
   });
 };

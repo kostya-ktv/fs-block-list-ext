@@ -8,7 +8,7 @@ export const NotAuth = () => {
   return (
     <div className="flex flex-col gap-y-2">
       <p>You are not authenticated</p>
-      <Button variant="outline" onClick={() => openTab()}>
+      <Button size="sm" variant="outline" onClick={() => openTab()}>
         <EnterIcon />
         Login
       </Button>
